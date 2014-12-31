@@ -1,13 +1,17 @@
 /**
- *	jQuery Magic Line.
- *	@version 1.0
+ *	jQuery plugin boilerplate.
+ *	@version 1.1
  */
 
 (function( $ ){
 
 	var defaults = {
 		leftOffset : 15,
-		live : true
+		live : true,
+		keepCurrent: true,
+		animate: {
+			duration: 400
+		}
 	};
 	var data_attr = 'magicline-data';
 
@@ -41,18 +45,23 @@
 					.data('origLeft', data.leftPos)
 					.data('origWidth', data.newWidth);
 
+				if (data.keepCurrent){
+					data.$line.clone().appendTo(data.$mainNav);
+				}
+
 				if (data.live){
+
 					data.$mainNav.find('a').hover(function() {
 						var $el = $(this);
 						data.$line.stop().animate({
 							left: $el.parent().position().left + data.leftOffset,
 							width: $el.width()
-						});
+						}, data.animate);
 					}, function() {
 						data.$line.stop().animate({
 							left: data.$line.data('origLeft'),
 							width: data.$line.data('origWidth')
-						});
+						}, data.animate);
 					});
 				}
 
